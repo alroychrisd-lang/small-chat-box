@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SMALL AI CHAT BOX</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: yellow;
+            font-family: Arial, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Main white chatbox */
+        .chat-container {
+            width: 600px;
+            height: 500px;
+            background: white;
+            border: 10px solid black;
+
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 10px;
+            border-bottom: 2px solid black;
+        }
+
+        /* Chat messages */
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 90%;
+            overflow-wrap: anywhere;
+        }
+
+        .user {
+            background: #dceeff;
+            align-self: flex-end;
+        }
+
+        .bot {
+            background: #eeeeee;
+            align-self: flex-start;
+        }
+
+        /* Input section */
+        .input-area {
+            display: flex;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 2px solid black;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            font-size: 15px;
+            border: 2px solid black;
+            border-radius: 5px;
+            min-width: 0;
+        }
+
+        button {
+            padding: 10px 18px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        @media (max-width: 650px) {
+            .chat-container {
+                width: 95%;
+                height: 85vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="chat-container">
+
+        <div class="header">
+            SMALL AI CHAT BOX
+        </div>
+
+        <div class="chat-area" id="chatArea">
+            <div class="message bot">
+                Bot: Welcome! Start chatting...
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Enter your message..."
+                autocomplete="off"
+            >
+
+            <button onclick="sendMessage()">SEND</button>
+        </div>
+
+    </div>
+
+    <script>
+
+        // =========================
+        // RESPONSE DATABASE
+        // =========================
+
+        const responses = [
+            "a|apple",
+            "b|ball",
+            "c|cat",
+            "d|dog",
+            "e|elephant",
+            "f|fish",
+            "g|goat",
+            "h|horse",
+            "i|ice",
+            "j|jug",
+            "k|kite",
+            "l|lion",
+            "m|mango",
+            "n|nest",
+            "o|orange",
+            "p|parrot",
+            "q|queen",
+            "r|rabbit",
+            "s|sun",
+            "t|tiger",
+            "u|umbrella",
+            "v|van",
+            "w|watch",
+            "x|xylophone",
+            "y|yak",
+            "z|zebra",
+
+            "hi|hello",
+            "hello|hi there",
+            "hey|hello",
+            "good morning|Good morning! How are you?",
+            "good night|Sweet dreams!",
+            "how are you|I am fine, thank you!",
+            "what is your name|I am your JavaScript chatbot",
+            "who are you|I am a simple AI chatbot",
+            "thank you|You're welcome!",
+            "thanks|Happy to help!",
+            "bye|Goodbye! Have a nice day",
+            "goodbye|See you again!",
+            "help|How can I help you?",
+            "yes|Okay!",
+            "no|Alright!",
+            "what can you do|I can answer simple questions",
+            "who created you|I was created using JavaScript",
+            "how old are you|I don't have an age",
+            "nice to meet you|Nice to meet you too!"
+        ];
+
+        // =========================
+        // DISPLAY MESSAGE
+        // =========================
+
+        function displayMessage(message, type) {
+
+            const chatArea = document.getElementById("chatArea");
+
+            const messageDiv = document.createElement("div");
+
+            messageDiv.className = "message " + type;
+
+            messageDiv.textContent =
+                (type === "user" ? "You: " : "Bot: ") + message;
+
+            chatArea.appendChild(messageDiv);
+
+            // Automatic scroll down
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // =========================
+        // CHATBOT LOGIC
+        // =========================
+
+        function react(user) {
+
+            user = user.toLowerCase().trim();
+
+            let found = false;
+
+            for (let item of responses) {
+
+                let [key, answer] = item.split("|");
+
+                if (user === key || user === key + " for") {
+
+                    displayMessage(answer, "bot");
+
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                displayMessage(
+                    "Sorry, I don't understand.",
+                    "bot"
+                );
+            }
+        }
+
+        // =========================
+        // USER INTERACTION
+        // =========================
+
+        function sendMessage() {
+
+            const input = document.getElementById("userInput");
+
+            const user = input.value.trim();
+
+            if (user === "") {
+                return;
+            }
+
+            displayMessage(user, "user");
+
+            input.value = "";
+
+            react(user);
+
+            input.focus();
+        }
+
+        // Enter key support
+        document.getElementById("userInput")
+            .addEventListener("keydown", function(event) {
+
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+
+            });
+
+    </script>
+
+</body>
+</html>
