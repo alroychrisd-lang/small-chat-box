@@ -1,937 +1,135 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMALL AI | Futuristic Assistant</title>
-
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: #080D18;
-    color: #EAF6FF;
-    font-family: Arial, sans-serif;
-    height: 100vh;
-    overflow: hidden;
-}
-
-/* APP LAYOUT */
-.app {
-    display: flex;
-    height: 100vh;
-}
-
-/* SIDEBAR */
-.sidebar {
-    width: 250px;
-    background: #0B1422;
-    border-right: 1px solid #19354A;
-    padding: 22px 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.logo {
-    font-size: 23px;
-    font-weight: bold;
-    color: #42E8FF;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-}
-
-.logo span {
-    color: white;
-}
-
-.version {
-    color: #6B8DA3;
-    font-size: 11px;
-    margin-bottom: 30px;
-}
-
-.new-chat {
-    background: #102D42;
-    color: #42E8FF;
-    border: 1px solid #23617C;
-    padding: 13px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-bottom: 25px;
-}
-
-.new-chat:hover {
-    background: #17435C;
-}
-
-.side-heading {
-    color: #63849A;
-    font-size: 11px;
-    margin-bottom: 12px;
-}
-
-.history {
-    overflow-y: auto;
-    flex: 1;
-}
-
-.history-item {
-    padding: 11px;
-    color: #A8C0D1;
-    font-size: 13px;
-    border-radius: 7px;
-    cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.history-item:hover {
-    background: #142A3B;
-    color: #42E8FF;
-}
-
-.sidebar-bottom {
-    border-top: 1px solid #19354A;
-    padding-top: 15px;
-    color: #7895A8;
-    font-size: 12px;
-    line-height: 2;
-}
-
-/* MAIN */
-.main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-/* TOPBAR */
-.topbar {
-    height: 65px;
-    background: #0B1422;
-    border-bottom: 1px solid #19354A;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 25px;
-}
-
-.status {
-    color: #35E6A5;
-    font-size: 12px;
-}
-
-.status-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: #35E6A5;
-    border-radius: 50%;
-    margin-right: 6px;
-    box-shadow: 0 0 10px #35E6A5;
-}
-
-.clear-btn {
-    background: transparent;
-    border: 1px solid #29445A;
-    color: #A7C0D1;
-    padding: 8px 12px;
-    border-radius: 7px;
-    cursor: pointer;
-}
-
-/* CHAT AREA */
-.chat-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 30px 7%;
-    scroll-behavior: smooth;
-}
-
-.chat-area::-webkit-scrollbar,
-.history::-webkit-scrollbar {
-    width: 6px;
-}
-
-.chat-area::-webkit-scrollbar-thumb,
-.history::-webkit-scrollbar-thumb {
-    background: #22516C;
-    border-radius: 10px;
-}
-
-/* WELCOME */
-.welcome {
-    text-align: center;
-    margin: 50px auto 30px;
-}
-
-.ai-icon {
-    width: 90px;
-    height: 90px;
-    margin: auto auto 22px;
-    border-radius: 50%;
-    border: 2px solid #25D9FF;
-    background: #102B40;
-    display: grid;
-    place-items: center;
-    font-size: 42px;
-    box-shadow: 0 0 30px #087FA555;
-}
-
-.welcome h1 {
-    font-size: 30px;
-    margin-bottom: 12px;
-}
-
-.welcome h1 span {
-    color: #42E8FF;
-}
-
-.welcome p {
-    color: #7D9CB0;
-    font-size: 14px;
-}
-
-/* QUICK PROMPTS */
-.suggestions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 25px;
-}
-
-.suggestion {
-    background: #101F30;
-    color: #B9D8E9;
-    border: 1px solid #24465F;
-    border-radius: 20px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.suggestion:hover {
-    border-color: #42E8FF;
-    color: #42E8FF;
-}
-
-/* MESSAGES */
-.message {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 25px;
-    animation: appear .25s ease;
-}
-
-@keyframes appear {
-    from {opacity: 0; transform: translateY(8px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
-.avatar {
-    min-width: 36px;
-    height: 36px;
-    background: #12354B;
-    border: 1px solid #24708E;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    color: #42E8FF;
-    font-size: 15px;
-}
-
-.message-content {
-    max-width: 85%;
-    min-width: 0;
-}
-
-.sender {
-    color: #42E8FF;
-    font-size: 12px;
-    font-weight: bold;
-    margin-bottom: 7px;
-}
-
-.message-text {
-    color: #DCEBF5;
-    font-size: 14px;
-    line-height: 1.7;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
-
-.user-message {
-    flex-direction: row-reverse;
-}
-
-.user-message .avatar {
-    background: #153951;
-    color: #FFFFFF;
-}
-
-.user-message .message-content {
-    text-align: right;
-}
-
-.user-message .sender {
-    color: #A8CFFF;
-}
-
-/* TYPING */
-.typing {
-    color: #42E8FF;
-    font-size: 12px;
-    padding: 10px 0;
-}
-
-/* INPUT */
-.input-section {
-    padding: 15px 7% 22px;
-    background: #0B1422;
-    border-top: 1px solid #19354A;
-}
-
-.input-box {
-    display: flex;
-    gap: 10px;
-    background: #101F30;
-    border: 1px solid #28516B;
-    border-radius: 14px;
-    padding: 8px;
-    transition: .2s;
-}
-
-.input-box:focus-within {
-    border-color: #42E8FF;
-    box-shadow: 0 0 15px #42E8FF22;
-}
-
-.input-box input {
-    flex: 1;
-    min-width: 0;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: white;
-    font-size: 14px;
-    padding: 12px;
-}
-
-.input-box input::placeholder {
-    color: #68879B;
-}
-
-.send-btn {
-    background: #087FA5;
-    border: none;
-    color: white;
-    border-radius: 10px;
-    padding: 0 20px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.send-btn:hover {
-    background: #10A4CB;
-}
-
-.footer {
-    text-align: center;
-    color: #577589;
-    font-size: 10px;
-    margin-top: 12px;
-}
-
-/* MOBILE */
-@media(max-width: 700px) {
-    .sidebar {
-        display: none;
-    }
-
-    .chat-area {
-        padding: 20px 15px;
-    }
-
-    .input-section {
-        padding: 12px;
-    }
-
-    .welcome h1 {
-        font-size: 23px;
-    }
-
-    .topbar {
-        padding: 0 12px;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<div class="app">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-
-        <div class="logo">✦ SMALL <span>AI</span></div>
-        <div class="version">INTELLIGENCE SYSTEM 2.0</div>
-
-        <button class="new-chat" onclick="newChat()">
-            ＋ New Chat
-        </button>
-
-        <div class="side-heading">RECENT CONVERSATIONS</div>
-
-        <div class="history" id="history"></div>
-
-        <div class="sidebar-bottom">
-            ◈ Rule-Based Engine<br>
-            ◉ System Active<br>
-            ◈ Version 2.0.0
-        </div>
-
-    </aside>
-
-    <!-- MAIN -->
-    <main class="main">
-
-        <header class="topbar">
-            <div>
-                <strong>SMALL AI</strong>
-                <div class="status">
-                    <span class="status-dot"></span>ONLINE
-                </div>
-            </div>
-
-            <button class="clear-btn" onclick="clearChat()">
-                Clear Chat
-            </button>
-        </header>
-
-        <!-- CHAT -->
-        <section class="chat-area" id="chatArea">
-
-            <div class="welcome" id="welcome">
-
-                <div class="ai-icon">✦</div>
-
-                <h1>How can I <span>help you?</span></h1>
-
-                <p>Your personal rule-based AI assistant.</p>
-
-                <div class="suggestions">
-
-                    <button class="suggestion"
-                        onclick="quickSend('hi')">
-                        Say Hello
-                    </button>
-
-                    <button class="suggestion"
-                        onclick="quickSend('what is python')">
-                        Learn Python
-                    </button>
-
-                    <button class="suggestion"
-                        onclick="quickSend('help')">
-                        Help
-                    </button>
-
-                    <button class="suggestion"
-                        onclick="quickSend('who are you')">
-                        About AI
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- INPUT -->
-        <footer class="input-section">
-
-            <div class="input-box">
-
-                <input
-                    type="text"
-                    id="userInput"
-                    placeholder="Message SMALL AI..."
-                    autocomplete="off"
-                >
-
-                <button class="send-btn" onclick="sendMessage()">
-                    ➤ SEND
-                </button>
-
-            </div>
-
-            <div class="footer">
-                SMALL AI can make mistakes. Verify important information.
-            </div>
-
-        </footer>
-
-    </main>
-
-</div>
-
-<script>
-
-// ===================================
-// RESPONSE DATABASE
-// ===================================
-
-const responses = [
-
-    // ALPHABETS
-    "a|Apple",
-    "b|Ball",
-    "c|Cat",
-    "d|Dog",
-    "e|Elephant",
-    "f|Fish",
-    "g|Goat",
-    "h|Horse",
-    "i|Ice",
-    "j|Jug",
-    "k|Kite",
-    "l|Lion",
-    "m|Mango",
-    "n|Nest",
-    "o|Orange",
-    "p|Parrot",
-    "q|Queen",
-    "r|Rabbit",
-    "s|Sun",
-    "t|Tiger",
-    "u|Umbrella",
-    "v|Van",
-    "w|Watch",
-    "x|Xylophone",
-    "y|Yak",
-    "z|Zebra",
-
-    // GREETINGS
-    "hi|Hello! Welcome to SMALL AI.",
-    "hello|Hi there! How can I help you?",
-    "hey|Hey! Nice to see you.",
-    "good morning|Good morning! Have a great day.",
-    "good afternoon|Good afternoon! How can I help?",
-    "good evening|Good evening! Welcome back.",
-    "good night|Good night! Sweet dreams.",
-    "how are you|I am functioning perfectly. How are you?",
-    "how is your day|My day is going great. Thanks for asking.",
-    "what's up|I am here and ready to help.",
-    "nice to meet you|Nice to meet you too!",
-
-    // PERSONALITY
-    "who are you|I am SMALL AI, your simple rule-based chatbot.",
-    "what is your name|My name is SMALL AI.",
-    "who created you|I was created by my developer using programming.",
-    "what can you do|I can answer questions from my predefined knowledge database.",
-    "how old are you|I don't have a human age.",
-    "are you human|No. I am a computer program.",
-    "are you ai|I am a simple rule-based chatbot, not a trained AI model.",
-    "do you have feelings|I don't have human feelings, but I can respond to your messages.",
-    "are you intelligent|I can match your questions with stored responses.",
-    "do you sleep|No. I am available whenever you run my program.",
-    "where are you from|I live inside this application!",
-    "thank you|You're welcome! Happy to help.",
-    "thanks|My pleasure!",
-    "sorry|No problem!",
-    "bye|Goodbye! Have a wonderful day.",
-    "goodbye|See you again!",
-    "help|You can ask me about programming, computers, education, science and general knowledge.",
-
-    // PYTHON
-    "what is python|Python is a high-level, general-purpose programming language known for its readable syntax.",
-    "python|Python is a popular programming language.",
-    "what is variable|A variable stores a value in a program.",
-    "what is list|A list is an ordered, mutable collection of elements in Python.",
-    "what is tuple|A tuple is an ordered, immutable collection in Python.",
-    "what is dictionary|A dictionary stores data in key-value pairs.",
-    "what is set|A set is an unordered collection of unique elements.",
-    "what is loop|A loop repeats a block of code.",
-    "what is for loop|A for loop iterates over a sequence.",
-    "what is while loop|A while loop repeats while its condition is true.",
-    "what is function|A function is a reusable block of code.",
-    "what is class|A class is a blueprint for creating objects.",
-    "what is object|An object is an instance of a class.",
-    "what is oops|OOP stands for Object-Oriented Programming.",
-    "what is inheritance|Inheritance allows one class to acquire properties and methods of another class.",
-    "what is polymorphism|Polymorphism allows the same interface to represent different behaviours.",
-    "what is encapsulation|Encapsulation combines data and methods while controlling access.",
-    "what is abstraction|Abstraction hides implementation details and exposes essential features.",
-    "what is exception|An exception is an error or unexpected event during program execution.",
-    "what is try except|Try-except handles exceptions in Python.",
-    "what is module|A module is a Python file containing reusable code.",
-    "what is library|A library is a collection of reusable programming tools.",
-    "what is pip|Pip is Python's package installer.",
-    "what is tkinter|Tkinter is Python's standard GUI library.",
-    "what is turtle|Turtle is a Python graphics module.",
-    "what is compiler|A compiler translates source code into another form, often machine code.",
-    "what is interpreter|An interpreter executes program instructions.",
-    "what is recursion|Recursion occurs when a function calls itself.",
-    "what is lambda|Lambda creates a small anonymous function in Python.",
-    "what is boolean|Boolean represents True or False.",
-    "what is string|A string is a sequence of characters.",
-
-    // JAVA
-    "what is java|Java is a class-based, object-oriented programming language.",
-    "what is jvm|JVM stands for Java Virtual Machine.",
-    "what is jdk|JDK stands for Java Development Kit.",
-    "what is jre|JRE stands for Java Runtime Environment.",
-    "what is bytecode|Bytecode is the intermediate code generated by the Java compiler.",
-    "what is interface|An interface defines a contract that implementing classes follow.",
-    "what is constructor|A constructor initializes an object.",
-    "what is method|A method is a block of code that performs a task.",
-    "what is thread|A thread is a lightweight unit of execution.",
-    "what is multithreading|Multithreading allows multiple threads to execute concurrently.",
-
-    // WEB DEVELOPMENT
-    "what is html|HTML stands for HyperText Markup Language. It structures web pages.",
-    "what is css|CSS stands for Cascading Style Sheets. It styles web pages.",
-    "what is javascript|JavaScript adds interactivity and dynamic behaviour to websites.",
-    "what is website|A website is a collection of related web pages.",
-    "what is frontend|Frontend is the user-facing part of an application.",
-    "what is backend|Backend handles server-side logic, data and application operations.",
-    "what is api|An API allows different software systems to communicate.",
-    "what is json|JSON is a lightweight data interchange format.",
-    "what is dom|DOM stands for Document Object Model.",
-    "what is responsive design|Responsive design adapts a website to different screen sizes.",
-    "what is bootstrap|Bootstrap is a frontend CSS framework.",
-    "what is react|React is a JavaScript library for building user interfaces.",
-    "what is node js|Node.js is a JavaScript runtime built on Chrome's V8 engine.",
-    "what is flask|Flask is a lightweight Python web framework.",
-    "what is django|Django is a Python web framework.",
-
-    // DATABASE
-    "what is database|A database is an organized collection of information.",
-    "what is dbms|DBMS stands for Database Management System.",
-    "what is sql|SQL stands for Structured Query Language.",
-    "what is primary key|A primary key uniquely identifies each row in a table.",
-    "what is foreign key|A foreign key references a key in another table.",
-    "what is normalization|Normalization organizes database tables to reduce redundancy.",
-    "what is mysql|MySQL is a relational database management system.",
-    "what is mongodb|MongoDB is a document-oriented NoSQL database.",
-    "what is query|A query is a request to retrieve or manipulate data.",
-
-    // COMPUTER SCIENCE
-    "what is computer|A computer is an electronic device that processes data.",
-    "what is hardware|Hardware refers to the physical components of a computer.",
-    "what is software|Software is a collection of programs and instructions.",
-    "what is operating system|An operating system manages computer hardware and software resources.",
-    "what is ram|RAM stands for Random Access Memory.",
-    "what is rom|ROM stands for Read Only Memory.",
-    "what is cpu|CPU stands for Central Processing Unit.",
-    "what is gpu|GPU stands for Graphics Processing Unit.",
-    "what is operating system kernel|The kernel is the core part of an operating system.",
-    "what is file|A file is a named collection of stored data.",
-    "what is folder|A folder organizes files and other folders.",
-    "what is internet|The internet is a global network of interconnected networks.",
-    "what is ip address|An IP address identifies a device on a network.",
-    "what is network|A computer network connects devices to share information.",
-    "what is lan|LAN stands for Local Area Network.",
-    "what is wan|WAN stands for Wide Area Network.",
-    "what is http|HTTP stands for HyperText Transfer Protocol.",
-    "what is https|HTTPS is the secure version of HTTP.",
-    "what is cybersecurity|Cybersecurity protects systems, networks and data from digital threats.",
-    "what is virus|A computer virus is malicious software that can infect files or systems.",
-    "what is firewall|A firewall monitors and controls network traffic.",
-
-    // AI AND ML
-    "what is ai|AI stands for Artificial Intelligence. It enables machines to perform tasks associated with human intelligence.",
-    "what is artificial intelligence|Artificial Intelligence is the simulation of intelligent behaviour by machines.",
-    "what is machine learning|Machine Learning enables systems to learn patterns from data.",
-    "what is deep learning|Deep Learning uses multilayer neural networks.",
-    "what is neural network|A neural network is a computing model inspired by interconnected neurons.",
-    "what is chatbot|A chatbot is software designed to interact with users through conversation.",
-    "what is generative ai|Generative AI creates content such as text, images, audio and code.",
-    "what is nlp|NLP stands for Natural Language Processing.",
-    "what is dataset|A dataset is a collection of related data.",
-    "what is algorithm|An algorithm is a sequence of steps to solve a problem.",
-    "what is data science|Data Science extracts insights from data using statistical and computational methods.",
-
-    // EDUCATION
-    "what is bca|BCA stands for Bachelor of Computer Applications.",
-    "what is degree|A degree is an academic qualification awarded after completing a course of study.",
-    "what is programming|Programming is the process of writing instructions for a computer.",
-    "what is project|A project is a planned task designed to achieve a specific goal.",
-    "what is viva|A viva is an oral examination.",
-    "what is assignment|An assignment is a task given to students for learning or assessment.",
-    "what is presentation|A presentation communicates information to an audience.",
-    "what is communication|Communication is the exchange of information and ideas.",
-
-    // GENERAL KNOWLEDGE
-    "what is science|Science is the systematic study of the natural world.",
-    "what is gravity|Gravity is the force of attraction between objects with mass.",
-    "what is solar system|The solar system consists of the Sun and the objects that orbit it.",
-    "what is earth|Earth is the third planet from the Sun.",
-    "what is water|Water is a chemical compound with the formula H2O.",
-    "what is oxygen|Oxygen is a chemical element essential for most human respiration.",
-    "what is electricity|Electricity involves the presence or flow of electric charge.",
-    "what is energy|Energy is the capacity to do work.",
-    "what is democracy|Democracy is a system of government in which people participate in political decision-making.",
-    "what is india|India is a country in South Asia.",
-
-    // MATH
-    "what is addition|Addition combines two or more numbers.",
-    "what is subtraction|Subtraction finds the difference between numbers.",
-    "what is multiplication|Multiplication is repeated addition.",
-    "what is division|Division separates a quantity into equal parts.",
-    "what is percentage|Percentage represents a number as a fraction of 100.",
-    "what is average|Average is the sum of values divided by their count.",
-    "what is prime number|A prime number is greater than 1 and has exactly two positive divisors.",
-
-    // EXTRA INTERACTION
-    "tell me a joke|Why did the computer go to the doctor? Because it had a virus!",
-    "tell me something interesting|Honey never spoils when stored properly.",
-    "motivate me|Keep learning, keep building and never stop improving!",
-    "i am bored|Try learning something new or building a small coding project.",
-    "i am happy|That's great! Keep smiling and keep moving forward.",
-    "i am sad|Take a breath. Small steps can help you move forward.",
-    "good job|Thank you! Let's keep improving.",
-    "are you smart|I can answer questions from my stored response database.",
-    "can you learn|My current version uses fixed responses and does not learn automatically.",
-    "open youtube|I cannot control your computer, but you can visit youtube.com.",
-    "what is your purpose|My purpose is to provide simple answers from stored knowledge."
-];
-
-// ===================================
-// ELEMENTS
-// ===================================
-
-const chatArea = document.getElementById("chatArea");
-const input = document.getElementById("userInput");
-const history = document.getElementById("history");
-const welcome = document.getElementById("welcome");
-
-let conversation = [];
-
-// ===================================
-// DISPLAY MESSAGE
-// ===================================
-
-function displayMessage(text, sender) {
-
-    if (welcome) {
-        welcome.style.display = "none";
-    }
-
-    const message = document.createElement("div");
-    message.className = "message " +
-        (sender === "user" ? "user-message" : "");
-
-    const avatar = document.createElement("div");
-    avatar.className = "avatar";
-    avatar.textContent = sender === "user" ? "U" : "✦";
-
-    const content = document.createElement("div");
-    content.className = "message-content";
-
-    const name = document.createElement("div");
-    name.className = "sender";
-    name.textContent = sender === "user" ? "YOU" : "SMALL AI";
-
-    const textElement = document.createElement("div");
-    textElement.className = "message-text";
-    textElement.textContent = text;
-
-    const time = document.createElement("div");
-    time.style.color = "#607F94";
-    time.style.fontSize = "10px";
-    time.style.marginTop = "7px";
-    time.textContent = new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
-
-    content.appendChild(name);
-    content.appendChild(textElement);
-    content.appendChild(time);
-
-    message.appendChild(avatar);
-    message.appendChild(content);
-
-    chatArea.appendChild(message);
-
-    chatArea.scrollTop = chatArea.scrollHeight;
-
-    conversation.push({
-        text: text,
-        sender: sender
-    });
-}
-
-// ===================================
-// TYPING ANIMATION
-// ===================================
-
-function showTyping() {
-
-    const typing = document.createElement("div");
-    typing.className = "typing";
-    typing.id = "typing";
-    typing.textContent = "SMALL AI is thinking...";
-
-    chatArea.appendChild(typing);
-    chatArea.scrollTop = chatArea.scrollHeight;
-}
-
-function removeTyping() {
-    const typing = document.getElementById("typing");
-    if (typing) typing.remove();
-}
-
-// ===================================
-// CHATBOT RESPONSE ENGINE
-// ===================================
-
-function react(user) {
-
-    let found = false;
-
-    for (let item of responses) {
-
-        const separator = item.indexOf("|");
-
-        const key = item.substring(0, separator).toLowerCase();
-        const answer = item.substring(separator + 1);
-
-        if (user === key || user === key + " for") {
-
-            displayMessage(answer, "bot");
-            found = true;
-            break;
-        }
-    }
-
-    if (!found) {
-
-        displayMessage(
-            "Sorry, I don't understand that question yet. Try asking something else or type 'help'.",
-            "bot"
-        );
-    }
-}
-
-// ===================================
-// SEND MESSAGE
-// ===================================
-
-function sendMessage() {
-
-    const user = input.value.trim();
-
-    if (!user) return;
-
-    displayMessage(user, "user");
-
-    input.value = "";
-    input.disabled = true;
-
-    showTyping();
-
-    setTimeout(() => {
-
-        removeTyping();
-        react(user);
-
-        input.disabled = false;
-        input.focus();
-
-    }, 500);
-}
-
-// ===================================
-// QUICK PROMPTS
-// ===================================
-
-function quickSend(text) {
-
-    input.value = text;
-    sendMessage();
-
-}
-
-// ===================================
-// CLEAR CHAT
-// ===================================
-
-function clearChat() {
-
-    chatArea.innerHTML = "";
-
-    conversation = [];
-
-    if (welcome) {
-        chatArea.appendChild(welcome);
-        welcome.style.display = "block";
-    }
-
-}
-
-// ===================================
-// NEW CHAT
-// ===================================
-
-function newChat() {
-
-    clearChat();
-    input.value = "";
-    input.focus();
-
-}
-
-// ===================================
-// CHAT HISTORY
-// ===================================
-
-function updateHistory() {
-
-    const historyItem = document.createElement("div");
-
-    historyItem.className = "history-item";
-
-    historyItem.textContent =
-        conversation.length > 0
-        ? conversation[0].text
-        : "New conversation";
-
-    historyItem.title = historyItem.textContent;
-
-    history.prepend(historyItem);
-
-}
-
-// ===================================
-// KEYBOARD
-// ===================================
-
-input.addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-
-});
-
-// ===================================
-// STARTUP
-// ===================================
-
-console.log("SMALL AI 2.0 started successfully!");
-
-</script>
-
-</body>
-</html>
+// ================= HISTORY =================
+"who was mahatma gandhi|Mahatma Gandhi was the leader of India's freedom movement. He is known for truth and non-violence.",
+"when did india get independence|India got independence on 15 August 1947.",
+"who was the first prime minister of india|Jawaharlal Nehru was the first Prime Minister of independent India.",
+"who was the first president of india|Dr. Rajendra Prasad was the first President of India.",
+"who was subhas chandra bose|Subhas Chandra Bose was an Indian freedom fighter who founded the Indian National Army.",
+"who was bhagat singh|Bhagat Singh was a revolutionary freedom fighter who was executed by the British in 1931.",
+"when was the indian constitution adopted|The Indian Constitution was adopted on 26 November 1949.",
+"when did the indian constitution come into effect|The Indian Constitution came into effect on 26 January 1950.",
+"who was the first emperor of india|Chandragupta Maurya founded the Maurya Empire.",
+"who built the taj mahal|Mughal Emperor Shah Jahan commissioned the Taj Mahal in memory of Mumtaz Mahal.",
+"who was ashoka|Ashoka was a Mauryan emperor known for spreading Buddhism and promoting peace.",
+"who discovered america|Christopher Columbus reached the Americas in 1492, although Indigenous peoples had lived there for thousands of years.",
+"when did world war 2 end|World War II ended in 1945.",
+"when did world war 1 start|World War I started in 1914.",
+"who was napoleon|Napoleon Bonaparte was a French military leader and emperor.",
+"who built the red fort|The Mughal emperor Shah Jahan commissioned the Red Fort in Delhi.",
+"what was the quit india movement|The Quit India Movement was launched by Mahatma Gandhi in August 1942.",
+"who was rani lakshmibai|Rani Lakshmibai was the queen of Jhansi and a leader in the Indian Rebellion of 1857.",
+"what is the harappan civilization|The Harappan Civilization was an ancient urban civilization of the Indus Valley.",
+"who discovered the sea route to india|Vasco da Gama reached India by sea in 1498.",
+
+// ================= COMPUTER SCIENCE =================
+"what is a computer|A computer is an electronic device that accepts data, processes it and produces information.",
+"what is hardware|Hardware means the physical parts of a computer, such as the keyboard, monitor and CPU.",
+"what is software|Software is a set of programs and instructions that tells a computer what to do.",
+"what is an operating system|An operating system manages computer hardware and software. Examples include Windows, Linux and macOS.",
+"what is cpu|CPU stands for Central Processing Unit. It executes instructions and processes data.",
+"what is ram|RAM stands for Random Access Memory. It temporarily stores data used by running programs.",
+"what is rom|ROM stands for Read Only Memory. It stores data that is retained even when power is off.",
+"what is an algorithm|An algorithm is a step-by-step procedure for solving a problem.",
+"what is a flowchart|A flowchart is a diagram that represents the steps of a process or algorithm.",
+"what is database|A database is an organized collection of data that can be stored, accessed and managed.",
+"what is dbms|DBMS stands for Database Management System. It helps users create and manage databases.",
+"what is sql|SQL stands for Structured Query Language. It is used to manage and query relational databases.",
+"what is networking|Computer networking connects computers and devices so they can share data and resources.",
+"what is lan|LAN stands for Local Area Network. It connects devices within a limited area, such as an office.",
+"what is wan|WAN stands for Wide Area Network. It connects networks over large geographical areas.",
+"what is ip address|An IP address is a numerical address used to identify a device on a network.",
+"what is internet|The internet is a global network of connected computer networks.",
+"what is browser|A browser is software used to access websites. Examples include Chrome, Firefox and Edge.",
+"what is cloud computing|Cloud computing provides computing services such as storage and servers over the internet.",
+"what is cybersecurity|Cybersecurity protects computers, networks and data from digital attacks.",
+"what is encryption|Encryption converts readable information into coded information to protect it.",
+"what is artificial intelligence|Artificial Intelligence enables machines to perform tasks that normally require human intelligence.",
+"what is machine learning|Machine learning allows computers to learn patterns from data and make predictions.",
+"what is html|HTML stands for HyperText Markup Language. It structures web pages.",
+"what is css|CSS stands for Cascading Style Sheets. It controls the appearance of web pages.",
+"what is javascript|JavaScript is a programming language used to make web pages interactive.",
+"what is python|Python is a high-level programming language known for its simple syntax.",
+"what is java|Java is an object-oriented programming language used to build many types of applications.",
+"what is compiler|A compiler translates source code into another form, often machine code or intermediate code.",
+"what is an interpreter|An interpreter executes program instructions through an interpreter runtime.",
+"what is binary number system|The binary number system uses only two digits: 0 and 1.",
+"what is motherboard|The motherboard is the main circuit board that connects computer components.",
+"what is cache memory|Cache memory is small, fast memory that stores frequently used data for quick access.",
+"what is open source software|Open-source software makes its source code available under a licence that allows use and modification.",
+
+// ================= MATHEMATICS =================
+"what is algebra|Algebra is a branch of mathematics that uses letters and symbols to represent numbers.",
+"what is geometry|Geometry is the branch of mathematics that studies shapes, sizes, angles and space.",
+"what is pi|Pi is approximately 3.14159. It is the ratio of a circle's circumference to its diameter.",
+"what is percentage|Percentage means a value expressed as a fraction of 100.",
+"what is the formula for area of a circle|Area of a circle = π × radius × radius.",
+"what is the formula for circumference of a circle|Circumference = 2 × π × radius.",
+"what is the formula for area of a rectangle|Area of a rectangle = length × breadth.",
+"what is the formula for perimeter of a rectangle|Perimeter = 2 × (length + breadth).",
+"what is the formula for area of a triangle|Area of a triangle = 1/2 × base × height.",
+"what is the pythagoras theorem|In a right-angled triangle, hypotenuse squared = base squared + perpendicular squared.",
+"what is the square root of 144|The square root of 144 is 12.",
+"what is the square of 15|15 squared is 225.",
+"what is the cube of 5|5 cubed is 125.",
+"what is 10 percent of 500|10 percent of 500 is 50.",
+"what is 25 percent of 200|25 percent of 200 is 50.",
+"what is 50 percent|50 percent means one half of a value.",
+"what is an even number|An even number is an integer divisible by 2 without a remainder.",
+"what is an odd number|An odd number is an integer that is not divisible by 2 without a remainder.",
+"what is a prime number|A prime number is a whole number greater than 1 with exactly two positive factors: 1 and itself.",
+"what is the smallest prime number|The smallest prime number is 2.",
+"what is the average formula|Average = Sum of all values ÷ Number of values.",
+"what is simple interest|Simple Interest = (Principal × Rate × Time) ÷ 100.",
+"what is compound interest|Compound interest is interest calculated on the principal and accumulated interest.",
+"what is the formula for speed|Speed = Distance ÷ Time.",
+"what is the formula for distance|Distance = Speed × Time.",
+"what is the formula for time|Time = Distance ÷ Speed.",
+"what is probability|Probability measures how likely an event is to happen. It ranges from 0 to 1.",
+"what is a fraction|A fraction represents part of a whole and has a numerator and denominator.",
+"what is an integer|An integer is a whole number that can be positive, negative or zero.",
+"what is an equation|An equation is a mathematical statement showing that two expressions are equal.",
+"what is a linear equation|A linear equation is an equation whose highest variable power is 1.",
+"what is the value of 2 power 5|2 raised to the power 5 equals 32.",
+"what is factorial|Factorial is the product of all positive integers from 1 up to a given number.",
+
+// ================= SCIENCE =================
+"what is physics|Physics is the science that studies matter, energy, motion and forces.",
+"what is chemistry|Chemistry is the science that studies substances, their properties and reactions.",
+"what is biology|Biology is the scientific study of living organisms.",
+"what is gravity|Gravity is the force of attraction between objects with mass.",
+"what is photosynthesis|Photosynthesis is the process by which green plants use sunlight to make food.",
+"what is the human heart|The human heart is a muscular organ that pumps blood throughout the body.",
+"how many bones are in an adult human body|An average adult human body has 206 bones.",
+"what is the boiling point of water|At standard atmospheric pressure, water boils at 100 degrees Celsius.",
+"what is the freezing point of water|At standard atmospheric pressure, water freezes at 0 degrees Celsius.",
+"what is the chemical formula of water|The chemical formula of water is H2O.",
+"what is oxygen|Oxygen is a chemical element essential for human respiration.",
+"what is the solar system|The solar system consists of the Sun and the objects that orbit it.",
+"which is the largest planet|Jupiter is the largest planet in our solar system.",
+"which planet is closest to the sun|Mercury is the closest planet to the Sun.",
+"what is the speed of light|The speed of light in a vacuum is approximately 299,792 kilometres per second.",
+"what is an atom|An atom is the basic unit of a chemical element.",
+"what is electricity|Electricity is associated with the presence and movement of electric charge.",
+"what is renewable energy|Renewable energy comes from sources that are naturally replenished, such as sunlight and wind.",
+
+// ================= GENERAL KNOWLEDGE =================
+"what is the capital of india|New Delhi is the capital of India.",
+"what is the national animal of india|The Bengal tiger is the national animal of India.",
+"what is the national bird of india|The Indian peacock is the national bird of India.",
+"what is the national flower of india|The lotus is the national flower of India.",
+"what is the currency of india|The Indian Rupee (INR) is the currency of India.",
+"which is the largest ocean|The Pacific Ocean is the largest ocean on Earth.",
+"which is the largest continent|Asia is the largest continent by area.",
+"which is the smallest continent|Australia is the smallest continent by area.",
+"what is the capital of japan|Tokyo is the capital of Japan.",
+"what is the capital of france|Paris is the capital of France.",
+"what is the capital of usa|Washington, D.C. is the capital of the United States.",
+"what is the capital of australia|Canberra is the capital of Australia.",
+"who invented the telephone|Alexander Graham Bell is traditionally credited with inventing the telephone.",
+"who invented the light bulb|Thomas Edison developed a practical, commercially successful incandescent light bulb; other inventors also contributed.",
+"who is known as the father of computers|Charles Babbage is widely known as the father of the computer.",
+"who is known as the missile man of india|Dr. A. P. J. Abdul Kalam is known as the Missile Man of India.",
+"what is karnataka famous for|Karnataka is known for Bengaluru, Mysuru Palace, Hampi, its culture and natural landscapes.",
+"what is the capital of karnataka|Bengaluru is the capital of Karnataka.",
+"what is the largest state in india by area|Rajasthan is the largest Indian state by area.",
+"what is the smallest state in india by area|Goa is the smallest Indian state by area."
